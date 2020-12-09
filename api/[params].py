@@ -51,6 +51,6 @@ def catch_all(path):
                  "lang=en&hini={hini}&tref={tref}&hfin={hfin}&fl={fl}" \
                  "&hl=3000&aero=yes&wmo={wmo}&submit=submit"
     url = OGIMET_URL.format(hini=hini, tref=tref, hfin=hfin, fl=fl, wmo=wmo)
-    app.logger.info('proxying %s', url)
+    # app.logger.info('proxying %s', url)
     response = fetch_image(url)
     return allow_cors(response)
