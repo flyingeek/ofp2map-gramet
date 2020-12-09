@@ -43,7 +43,7 @@ def fetch_image(url):
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    data, name = path.replace('proxy/', '').split('__')
+    data, name = path.replace('api/', '').split('__')
     hini, tref, hfin, fl, wmo = data.split('-')
     now_ts = int(time.time())
     tref = max(now_ts, int(tref))
