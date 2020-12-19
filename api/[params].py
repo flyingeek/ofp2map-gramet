@@ -6,7 +6,16 @@ import time
 import requests
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
+@app.after_request
+def add_headers(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
+
+
+# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
 
 def fetch_image(url):
     url_object = urlsplit(url)
