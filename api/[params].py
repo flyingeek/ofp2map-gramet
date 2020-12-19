@@ -5,8 +5,8 @@ import re
 import time
 import requests
 
-app = CORS(Flask(__name__), resources={r"/api/*": {"origins": "*"}})
-
+app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 def fetch_image(url):
     url_object = urlsplit(url)
