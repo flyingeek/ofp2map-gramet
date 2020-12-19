@@ -18,7 +18,7 @@ def fetch_image(url):
     try:
         r = requests.get(url, timeout=6)
     except requests.exceptions.Timeout:
-        return Response("ogimet gramet TimeOut", status=504)
+        return Response("ogimet gramet TimeOut", status=408)
     data = r.text
     if data:
         m = re.search(r'<img src="([^"]+/gramet_[^"]+)"', data)
