@@ -1,21 +1,10 @@
 from flask import Flask, Response
-from flask_cors import CORS
 from urllib.parse import urlsplit
 import re
 import time
 import requests
 
 app = Flask(__name__)
-
-
-@app.after_request
-def add_headers(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
-    return response
-
-
-# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 def fetch_image(url):
@@ -57,8 +46,11 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
                  "lang=en&hini={hini}&tref={tref}&hfin={hfin}&fl={fl}" \
                  "&hl=3000&aero=yes&wmo={wmo}&submit=submit"
     url = OGIMET_URL.format(hini=hini, tref=tref, hfin=hfin, fl=fl, wmo=wmo)
-    # app.logger.info('proxying %s', url)
     response = fetch_image(url)
+
+    # add CORS headers
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
     return response
 
 
