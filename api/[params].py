@@ -18,7 +18,7 @@ def fetch_image(url):
     try:
         r = requests.get(url, timeout=6)
     except requests.exceptions.Timeout:
-        return Response("ogimet gramet TimeOut", status=408)
+        return allow_cors(Response("ogimet gramet TimeOut", status=408))
     data = r.text
     if data:
         m = re.search(r'<img src="([^"]+/gramet_[^"]+)"', data)
@@ -29,17 +29,17 @@ def fetch_image(url):
             try:
                 response = requests.get(img_src, cookies=cookies, timeout=2)
             except requests.exceptions.Timeout:
-                return Response("ogimet fetch image TimeOut", status=504)
+                return allow_cors(Response("ogimet fetch image TimeOut", status=504))
             content_type=response.headers.get('content-type')
             mimetype, _, _ = content_type.partition(';')
             if not mimetype.startswith("image/"):
-                return Response('gramet is not an image', status=406)
+                return allow_cors(Response('gramet is not an image', status=406))
             return Response(
                 response.content,
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-    return Response("gramet not found", status=404)
+    return allow_cors(Response("gramet not found", status=404))
 
 
 @app.route('/api/<int:hini>-<int:tref>-<int:hfin>-<int:fl>-<wmo>__<name>')
@@ -58,4 +58,4 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return Response("not a gramet request", status=400)
+    return allow_cors(Response("not a gramet request", status=400))
