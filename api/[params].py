@@ -12,6 +12,7 @@ app = Flask(__name__)
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
+    return response
 
 
 # cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
