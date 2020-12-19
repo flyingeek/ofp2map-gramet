@@ -32,6 +32,8 @@ def fetch_image(url):
                 return allow_cors(Response("ogimet fetch image TimeOut", status=504))
             content_type=response.headers.get('content-type')
             mimetype, _, _ = content_type.partition(';')
+            if response.status_code != 200:
+                return allow_cors(Response('ogimet returns with status %s' % response.status_code, status=response.status_code))
             if not mimetype.startswith("image/"):
                 return allow_cors(Response('gramet is not an image', status=406))
             return Response(
