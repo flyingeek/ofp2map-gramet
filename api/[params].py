@@ -42,7 +42,7 @@ def fetch_image(url):
     return Response("gramet not found", status=404)
 
 
-@app.route('/api/<int:hini>-<int:tref>-<int:hfin>-<int:fl>-<wmo>__<rest>')
+@app.route('/api/<int:hini>-<int:tref>-<int:hfin>-<int:fl>-<wmo>__<name>')
 def proxy_gramet(hini, tref, hfin, fl, wmo, name):
     now_ts = int(time.time())
     tref = max(now_ts, int(tref))
