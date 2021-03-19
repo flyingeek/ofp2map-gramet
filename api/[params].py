@@ -41,7 +41,11 @@ def fetch_image(url):
 @app.route('/api/<int:hini>-<int:tref>-<int:hfin>-<int:fl>-<wmo>__<name>')
 def proxy_gramet(hini, tref, hfin, fl, wmo, name):
     now_ts = int(time.time())
-    tref = max(now_ts, int(tref))
+    tref = int(tref)
+    tref_hours = tref / 3600.0
+    if (tref_hours - int(tref_hours)) > 0.5:
+        tref = (int(tref_hours) + 1) * 3600
+    tref = max(now_ts, tref)
     OGIMET_URL = "http://www.ogimet.com/display_gramet.php?" \
                  "lang=en&hini={hini}&tref={tref}&hfin={hfin}&fl={fl}" \
                  "&hl=3000&aero=yes&wmo={wmo}&submit=submit"
