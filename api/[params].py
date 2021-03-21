@@ -7,7 +7,7 @@ import requests
 app = Flask(__name__)
 
 
-def fetch_image(url):
+def fetch_image(url, etag_src):
     url_object = urlsplit(url)
     try:
         r = requests.get(url, timeout=6)
@@ -30,21 +30,13 @@ def fetch_image(url):
                 return Response('ogimet returns with status %s' % response.status_code, status=response.status_code)
             if not mimetype.startswith("image/"):
                 return Response('gramet is not an image', status=406)
-            etag = response.headers.get('ETag')
-            last_modified = response.headers.get('Last-Modified', None)
-            newResponse =  Response(
+            proxy_response = Response(
                 response.content,
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-            # print(last_modified)
-            # print(etag)
-            # if last_modified:
-            #     newResponse.last_modified = time.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
-            # if etag:
-            #     newResponse.set_etag(etag)
-            newResponse.add_etag()
-            return newResponse
+            proxy_response.set_etag(etag_src)
+            return proxy_response
     return Response("gramet not found", status=404)
 
 
@@ -60,7 +52,8 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
                  "lang=en&hini={hini}&tref={tref}&hfin={hfin}&fl={fl}" \
                  "&hl=3000&aero=yes&wmo={wmo}&submit=submit"
     url = OGIMET_URL.format(hini=hini, tref=tref, hfin=hfin, fl=fl, wmo=wmo)
-    response = fetch_image(url)
+    etag_src = "{hini}&tref={tref}&hfin={hfin}&fl={fl}&wmo={wmo}".format(hini=hini, tref=int(tref / 3600.0), hfin=hfin, fl=fl, wmo=wmo)
+    response = fetch_image(url, etag_src)
 
     # add CORS headers
     response.headers.add('Access-Control-Allow-Origin', '*')
