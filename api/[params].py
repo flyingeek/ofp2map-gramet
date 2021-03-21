@@ -37,8 +37,8 @@ def fetch_image(url):
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-            if last_modified:
-                newResponse.last_modified = last_modified
+            # if last_modified:
+            #     newResponse.last_modified = last_modified
             return newResponse
     return Response("gramet not found", status=404)
 
