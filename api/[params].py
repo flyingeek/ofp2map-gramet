@@ -41,8 +41,8 @@ def fetch_image(url):
             print(etag)
             if last_modified:
                 newResponse.last_modified = time.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
-            if etag:
-                newResponse.set_etag(etag)
+            # if etag:
+            #     newResponse.set_etag(etag)
             return newResponse
     return Response("gramet not found", status=404)
 
