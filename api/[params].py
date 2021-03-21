@@ -61,6 +61,7 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
     # add CORS headers
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
+    response.headers.add("Access-Control-Expose-Headers:", "ETag, X-ETag")
     return response
 
 
