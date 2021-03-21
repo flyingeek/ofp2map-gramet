@@ -36,7 +36,7 @@ def fetch_image(url, etag_src):
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-            proxy_response.set_etag(sha1(etag_src).hexdigest())
+            proxy_response.set_etag(sha1(etag_src.encode('utf-8')).hexdigest())
             return proxy_response
     return Response("gramet not found", status=404)
 
