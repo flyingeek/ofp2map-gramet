@@ -1,5 +1,6 @@
 from flask import Flask, Response
 from urllib.parse import urlsplit
+from hashlib import sha1
 import re
 import time
 import requests
@@ -35,7 +36,7 @@ def fetch_image(url, etag_src):
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-            proxy_response.set_etag(etag_src)
+            proxy_response.set_etag(sha1(etag_src).hexdigest())
             return proxy_response
     return Response("gramet not found", status=404)
 
