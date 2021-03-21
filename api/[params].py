@@ -31,15 +31,14 @@ def fetch_image(url):
             if not mimetype.startswith("image/"):
                 return Response('gramet is not an image', status=406)
             # etag = response.headers.get('ETag')
-            # last_modified = response.headers.get('Last-Modified', None)
+            last_modified = response.headers.get('Last-Modified', None)
             newResponse =  Response(
                 response.content,
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
-            # if last_modified:
-            #     newResponse.last_modified = last_modified
-            #newResponse.last_modified = response.last_modified
+            if last_modified:
+                newResponse.last_modified = time.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
             return newResponse
     return Response("gramet not found", status=404)
 
