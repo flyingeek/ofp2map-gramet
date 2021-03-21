@@ -37,6 +37,7 @@ def fetch_image(url):
                 content_type=content_type,
                 mimetype=mimetype,
                 status=response.status_code)
+            print(last_modified)
             if last_modified:
                 newResponse.last_modified = time.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
             return newResponse
