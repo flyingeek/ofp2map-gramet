@@ -30,10 +30,13 @@ def fetch_image(url):
                 return Response('ogimet returns with status %s' % response.status_code, status=response.status_code)
             if not mimetype.startswith("image/"):
                 return Response('gramet is not an image', status=406)
+            # etag = response.headers.get('ETag')
+            last_modified = response.headers.get('Last-Modified')
             return Response(
                 response.content,
                 content_type=content_type,
                 mimetype=mimetype,
+                last_modified = last_modified,
                 status=response.status_code)
     return Response("gramet not found", status=404)
 
