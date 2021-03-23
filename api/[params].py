@@ -16,8 +16,8 @@ def fetch_image(url, etag_src):
         return Response("ogimet gramet TimeOut", status=408)
     data = r.text
     if data:
-        if data.find('no grib data') >=0 :
-            return Response('No grib data available', status=503)
+        if data.find('No grib data available') >=0 :
+            return Response('no grib data', status=503)
         m = re.search(r'gramet_lee_rutind: Error, no se han encontrado datos de (.+)', data)
         if m:
             return Response(m.group(1), status=409) # wmo non reconnu
