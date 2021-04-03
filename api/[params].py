@@ -17,7 +17,7 @@ def fetch_image(url, etag_src):
     data = r.text
     if data:
         if data.find('No grib data available') >=0 :
-            return Response('no grib data', status=503)
+            return Response('no grib data', status="503 no grib data")
         m = re.search(r'gramet_lee_rutind: Error, no se han encontrado datos de (.+)', data)
         if m:
             return Response(m.group(1), status="409 " + m.group(1) + " unknown wmo") # wmo non reconnu
@@ -67,6 +67,7 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
     response.headers.add("Access-Control-Expose-Headers", "ETag, X-ETag")
+    print(response.status, response.status_code)
     return response
 
 
