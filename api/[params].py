@@ -13,14 +13,14 @@ def fetch_image(url, etag_src):
     try:
         r = requests.get(url, timeout=6)
     except requests.exceptions.Timeout:
-        return Response("ogimet gramet TimeOut", status=408)
+        return Response("ogimet gramet TimeOut", status="408 ogimet gramet TimeOut")
     data = r.text
     if data:
         if data.find('No grib data available') >=0 :
             return Response('no grib data', status=503)
         m = re.search(r'gramet_lee_rutind: Error, no se han encontrado datos de (.+)', data)
         if m:
-            return Response(m.group(1), status=409) # wmo non reconnu
+            return Response(m.group(1), status="409 " + m.group(1) + " unknown wmo") # wmo non reconnu
         m = re.search(r'<img src="([^"]+/gramet_[^"]+)"', data)
         if m:
             img_src = "{url.scheme}://{url.netloc}{path}".format(
@@ -29,13 +29,13 @@ def fetch_image(url, etag_src):
             try:
                 response = requests.get(img_src, cookies=cookies, timeout=2)
             except requests.exceptions.Timeout:
-                return Response("ogimet fetch image TimeOut", status=504)
+                return Response("ogimet fetch image TimeOut", status="504 ogimet fetch image TimeOut")
             content_type=response.headers.get('content-type')
             mimetype, _, _ = content_type.partition(';')
             if response.status_code != 200:
                 return Response('ogimet returns with status %s' % response.status_code, status=response.status_code)
             if not mimetype.startswith("image/"):
-                return Response('gramet is not an image', status=406)
+                return Response('gramet is not an image', status="406 gramet is not an image")
             proxy_response = Response(
                 response.content,
                 content_type=content_type,
@@ -45,7 +45,7 @@ def fetch_image(url, etag_src):
             proxy_response.headers.add('X-ETag', etag)
             proxy_response.set_etag(etag, True)
             return proxy_response
-    return Response("gramet not found", status=404)
+    return Response("gramet not found", status="404 gramet not found")
 
 
 @app.route('/api/<int:hini>-<int:tref>-<int:hfin>-<int:fl>-<wmo>__<name>')
@@ -73,4 +73,4 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    return Response("not a gramet request", status=400)
+    return Response("not a gramet request", status="400 not a gramet request")
