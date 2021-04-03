@@ -67,7 +67,8 @@ def proxy_gramet(hini, tref, hfin, fl, wmo, name):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add("Access-Control-Allow-Headers", "X-Requested-With")
     response.headers.add("Access-Control-Expose-Headers", "ETag, X-ETag")
-    print(response.status, response.status_code)
+    if (response.status_code != 200):
+        response.headers.add('X-ofp2map-status', response.status)
     return response
 
 
