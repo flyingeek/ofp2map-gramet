@@ -19,7 +19,7 @@ def fetch_image(url, etag_src):
         if data.find('No grib data available') >=0 :
             return Response('no grib data', status="503 no grib data")
         if data.find('Sorry, OGIMET is overloaded. Try again in few minutes')>=0 :
-            return Response('OGIMET is overloaded', status="503 OGIMET is overloaded")
+            return Response('OGIMET is overloaded', status="404 OGIMET is overloaded")
         m = re.search(r'gramet_lee_rutind: Error, no se han encontrado datos de (.+)', data)
         if m:
             return Response(m.group(1), status="409 " + m.group(1) + " unknown wmo") # wmo non reconnu
