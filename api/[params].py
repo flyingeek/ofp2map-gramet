@@ -27,9 +27,12 @@ def fetch_image(url, etag_src):
         if m:
             img_src = "{url.scheme}://{url.netloc}{path}".format(
                 url=url_object, path=m.group(1))
-            cookies = dict(ogimet_serverid=r.cookies['ogimet_serverid'])
+            ogimet_serverid = r.cookies.get('ogimet_serverid', None)
             try:
-                response = requests.get(img_src, cookies=cookies, timeout=2)
+                if ogimet_serverid:
+                    response = requests.get(img_src, cookies=dict(ogimet_serverid=ogimet_serverid), timeout=2)
+                else:
+                    response = requests.get(img_src, timeout=2)
             except requests.exceptions.Timeout:
                 return Response("ogimet fetch image TimeOut", status="504 ogimet fetch image TimeOut")
             content_type=response.headers.get('content-type')
